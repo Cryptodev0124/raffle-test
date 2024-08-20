@@ -3,8 +3,8 @@ import { Pool } from '~/components/Pool'
 import { Link } from '@remix-run/react'
 
 import type { MetaFunction } from '@remix-run/cloudflare'
-import { useReadContracts } from 'wagmi'
-
+import { useReadContracts, useAccount, useSwitchChain, useWriteContract } from 'wagmi'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { raffleAbi } from '~/utils/abis'
 import { contracts, pools } from '~/utils/constants'
 import { Footer } from '~/components/nav/Footer'
@@ -12,7 +12,8 @@ import { useEffect, useState } from 'react'
 import { formatEth } from '~/utils/bigint'
 import { TermsModal } from '~/components/TermsModal'
 import { getReferrerId } from '~/utils/useReferrerTracker'
-
+import ticketImg from '~/assets/ticket1.png'
+import backgroundVideo from '~/assets/background2.mp4'
 import LeftArrow from '~/assets/left-arrow.svg'
 import RightArrow from '~/assets/right-arrow.svg'
 interface Pool {
@@ -44,6 +45,10 @@ export default function Index() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false)
+  const { openConnectModal } = useConnectModal()
+  const { switchChain } = useSwitchChain()
+  const { isConnected, address, chainId } = useAccount()
+  const contractWrite = useWriteContract()
 
   useEffect(() => {
     const termsAccepted = localStorage.getItem('isAgreedToTerms')
@@ -86,6 +91,21 @@ export default function Index() {
   const [livePageNumbers, setLivePageNumbers] = useState<LivePageNumbersArray>(
     [],
   )
+
+  let canStake = true
+  let iraPerTicket = '0x23455'
+  let buyBtnText = 'Buy Ticket'
+
+  if (!isConnected) {
+    buyBtnText = 'Connect Wallet'
+  } 
+  // else if (userEthdata < stakeAmount) {
+  //   buyBtnText = 'Not enough ETH balance'
+  //   canStake = false
+  // } 
+  else if (chainId !== 11155111) {
+    buyBtnText = 'Switch Network'
+  }
 
   const calculateLivePageNumbers = (
     totalLivePages: number,
@@ -215,8 +235,31 @@ export default function Index() {
     setPageNumbers(calculatePageNumbers(totalPages, newPageNumber))
   }
 
+  const buyTicket = () => {
+    if (!canStake) return
+    
+    if (!isConnected) {
+      openConnectModal?.()
+    } else if (chainId !== 11155111) {
+      switchChain({ chainId: 11155111 })
+    } else {
+      try {
+        contractWrite.writeContract({
+          abi: raffleAbi,
+          address: contracts.raffle,
+          functionName: 'depositTimePool',
+          // args: [BigInt(id), referralAddress],
+          value: BigInt(iraPerTicket),
+        })
+        alert(isConnected)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
+
   return (
-    <div className="bg-[#000000] text-white">
+    <div className="bg-transparent text-white">
       <style>
         {`
         .glow {
@@ -226,13 +269,53 @@ export default function Index() {
             animation: glow 1s ease-in-out infinite alternate;
           }
 
+        .buttonSection {
+          max-width: 200px;
+          display: flex;
+          justify-content: center;
+          margin: auto;
+          margin-top: 15px;
+        }
+
+        .buySection {
+          padding-top: 120px;
+        }
+
+        .buyInfoSection {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+        }
+
+        .infos {
+          display: flex;
+          flex-direction: column;
+          font-size: 32px;
+          padding: 15px;
+        }
+
+        .buyBtn {
+          height: 40px;
+        }
+
+        .ticketPrice {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        }
+
+        .ticketInfo {
+          font-size: 24px;
+          padding: 10px;
+        }
+
           @-webkit-keyframes glow {
             from {
-              text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+              text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #3976fe, 0 0 40px #3976fe, 0 0 50px #3976fe, 0 0 60px #3976fe, 0 0 70px #3976fe;
             }
             
             to {
-              text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+              text-shadow: 0 0 20px #fff, 0 0 30px #103ea4, 0 0 40px #103ea4, 0 0 50px #103ea4, 0 0 60px #103ea4, 0 0 70px #103ea4, 0 0 80px #103ea4;
             }
           }
 
@@ -244,119 +327,84 @@ export default function Index() {
 
           .blue-glow {
             animation: blue-glow 1.25s ease-in-out infinite alternate;
+            font-size: 32px;
           }
 
           @-webkit-keyframes blue-glow {
             from {
-              text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #0073e677, 0 0 40px #0073e677, 0 0 50px #0073e677, 0 0 60px #0073e677, 0 0 70px #0073e677;
+              text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
             }
             
             to {
-              text-shadow: 0 0 20px #fff, 0 0 30px #4da6ff77, 0 0 40px #4da6ff77, 0 0 50px #4da6ff77, 0 0 60px #4da6ff77, 0 0 70px #4da6ff77, 0 0 80px #4da6ff77;
+              text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
             }
           }
         `}
       </style>
+      <video
+          autoPlay
+          loop
+          muted
+          id="background-video"
+          style={{
+            backgroundSize: 'cover',
+            backgroundPosition: '50% 50%',
+            position: 'absolute',
+            margin: 'auto',
+            width: '100%',
+            height: 'inherit',
+            // right: '-100%',
+            // bottom: '-100%',
+            // top: '-100%',
+            // left: '-100%',
+            objectFit: 'cover',
+            zIndex: '-100',
+          }}
+        >
+          <source src={backgroundVideo} type="video/mp4" />
+        </video>
       <TopNav />
       <TermsModal
         isOpen={isTermsModalOpen}
         setIsOpen={() => setIsTermsModalOpen(false)}
       />
-      <div className="max-w-[1440px] px-8 mx-auto py-4 bg-[#000000]">
-        <div className="py-12">
-          <div className="text-2xl font-extrabold uppercase text-center text-white glow	">
-            Live Raffles
+      <div className='buySection'>
+        <div className='buyMarketing'>
+          <p className='font-extrabold animation uppercase text-center text-white blue-glow'>1 and 30 change of winning!</p>
+        </div>
+        <div className='buyInfoSection'>
+          <div className='infos'>
+            <p className="text-md font-extrabold text-center text-blue-700">Current Round:</p>
+            <p className='font-extrabold uppercase text-center text-white glow'>1</p>
           </div>
-          <div className="text-md font-extrabold text-center pt-5 text-rose-700">
-            ALL RAFFLE ENTRIES ARE FINAL
+          <div className='infos'>
+            <p className="text-md font-extrabold text-center text-blue-700">Tickets Left</p>
+            <p className='font-extrabold uppercase text-center text-white glow'>25</p>
           </div>
         </div>
-
-        <div className="flex flex-col lg:flex-row">
-          <div className="flex justify-center lg:justify-start">
-            <button
-              className="px-2 py-1 bg-[#FFFFFF08] lg:bg-[#FFFFFF00] text-white rounded mb-8 lg:mb-0 mr-0 lg:-mr-8"
-              onClick={() =>
-                handleLivePageChange(Math.max(currentLivePage - 1, 1))
-              }
-            >
-              <img src={LeftArrow} width="64px" />
-            </button>
+        <div className='marketingSection text-md font-extrabold text-center pt-5'>
+          <div className='ticketPrice'>
+            <p className='ticketInfo'>Ticket Price:</p>
+            <p className='ticketInfo'>$10 IRA</p>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-7 gap-y-14 w-full sm:px-16">
-            {/* Slice the pools data based on the current live page */}
-            {pools
-              .slice(
-                (currentLivePage - 1) * itemsLivePerPage,
-                currentLivePage * itemsLivePerPage,
-              )
-              .map((pool, index) => (
-                <div className="hover-animation blue-glow">
-                  <Pool
-                    key={index}
-                    id={pool.id}
-                    name={pool.name}
-                    stakeAmount={pool.stakeAmount}
-                    size={pool.size}
-                    theme={pool.theme}
-                  />
-                </div>
-              ))}
-          </div>
-
-          <div className="flex justify-center lg:justify-end">
-            <button
-              className="px-2 py-1 bg-[#FFFFFF08] lg:bg-[#FFFFFF00] text-white rounded mt-8 lg:mt-0 ml-0 lg:-ml-8"
-              onClick={() =>
-                handleLivePageChange(
-                  Math.min(currentLivePage + 1, totalLivePages),
-                )
-              }
-            >
-              <img src={RightArrow} width="64px" />
-            </button>
+          <div className='marketing'>
+            <p className='ticketInfo'>$10 to win $250</p>
           </div>
         </div>
-        {/* <div className="py-16">
-          <div className="text-2xl font-extrabold uppercase text-center text-white">
-            Finished Raffles
-          </div>
-        </div> */}
-      </div>
-      <div className="flex justify-center my-4">
-        {livePageNumbers.map((livePageNumber, index) => {
-          if (typeof livePageNumber === 'number') {
-            return (
-              <button
-                key={livePageNumber}
-                className={`px-2 py-1 mx-1 ${
-                  currentLivePage === livePageNumber
-                    ? 'bg-purple-500 glow text-white'
-                    : 'bg-[#FFFFFF33] text-white'
-                } rounded`}
-                onClick={() => handleLivePageChange(livePageNumber)}
-              >
-                {livePageNumber}
-              </button>
-            )
-          } else {
-            return (
-              <span
-                key={livePageNumber}
-                className="px-2 py-1 mx-1 bg-transparent text-white rounded"
-              >
-                ...
-              </span>
-            )
-          }
-        })}
+        <div className='imgSection text-md font-extrabold text-center pt-5'>
+          <img src={ticketImg} className='ticketImg' alt='' width="250px" />
+        </div>
+        <div className={`buttonSection mx-1 ${'bg-blue-500 glow text-white'} rounded`}>
+          <button className={`buyBtn ${
+              canStake ? 'hover:opacity-90' : 'opacity-60'
+            }`} onClick={() => buyTicket()} disabled={!canStake}>{buyBtnText}</button>
+        </div>
       </div>
 
       <div className="max-w-[1440px] px-8 md:px-24 mx-auto py-12">
-        <div className="px-4 md:px-12 py-8 flex flex-col rounded-[10px] bg-[#000000]">
+        <div className="px-4 md:px-12 py-8 flex flex-col rounded-[10px] bg-transparent">
           <div className="font-extrabold text-2xl uppercase mb-8">
-            Last Winning Pools
+            Last Winners
           </div>
           <div className="table border-separate border-spacing-x-0 border-spacing-y-0.5 rounded-3xl table-auto w-full text-sm">
             <div className="hidden lg:table-header-group">
@@ -374,7 +422,7 @@ export default function Index() {
                   Payout
                 </div>
                 <div className="table-cell uppercase text-left px-8 py-6 rounded-r-[10px]">
-                  Winning Wallet
+                  Winner Wallets
                 </div>
               </div>
             </div>
@@ -466,11 +514,10 @@ export default function Index() {
                 return (
                   <button
                     key={pageNumber}
-                    className={`px-2 py-1 mx-1 ${
-                      currentPage === pageNumber
-                        ? 'bg-purple-500 glow text-white'
-                        : 'bg-[#FFFFFF33] text-white'
-                    } rounded`}
+                    className={`px-2 py-1 mx-1 ${currentPage === pageNumber
+                      ? 'bg-purple-500 glow text-white'
+                      : 'bg-[#FFFFFF33] text-white'
+                      } rounded`}
                     onClick={() => handlePageChange(pageNumber)}
                   >
                     {pageNumber}

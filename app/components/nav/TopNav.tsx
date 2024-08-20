@@ -22,7 +22,7 @@ import { formatEth, formatPoints } from '~/utils/bigint'
 
 export const TopNav = () => {
   return (
-    <div className="bg-[#000000]">
+    <div className="bg-transparent" style={{ position: "fixed", width: "100%" }}>
       <div className="max-w-[1440px] mx-auto w-full flex justify-between items-center px-8">
         <div className="flex items-center text-style-sub p-[8px]">
           <Link to="/">
@@ -48,12 +48,12 @@ const DesktopMenu = () => {
       <div className="hidden md:flex justify-between items-center text-lg gap-8 text-[#ffffff]">
         {/* Menu */}
         <div className="hidden md:flex gap-8 mx-4">
-          <Link className="hover:text-white" to="/">
+          {/* <Link className="hover:text-white" to="/pools">
             Pools
-          </Link>
-          <Link className="hover:text-white" to="/mypools">
+          </Link> */}
+          {/* <Link className="hover:text-white" to="/mypools">
             My Pools
-          </Link>
+          </Link> */}
           {/* <Link className="hover:text-white" to="/wheel">
             WTF Spin Wheel
           </Link>
@@ -96,7 +96,7 @@ const MobileMenu = () => {
   return (
     <div className="md:hidden ml-auto flex flex-row gap-2">
       <ConnectButton />
-      <button
+      {/* <button
         type="button"
         className="btn-secondary px-1.5 py-1.5 text-sm flex justify-center items-center gap-2 font-medium self-stretch text-gray-500 w-[44px]"
         onClick={(e) => {
@@ -131,14 +131,9 @@ const MobileMenu = () => {
             { label: 'What The FLIP Coin Toss', href: '/coinflips' },
             { label: 'Innit2Winnit', href: '/jackpot' },
             { label: 'Moon or Doom', href: '/moons' },
-            // {
-            //   label: 'Twitter',
-            //   href: 'https://www.unixtimestamp.com/',
-            //   blank: true,
-            // },
           ]}
         />
-      </div>
+      </div> */}
     </div>
   )
 }

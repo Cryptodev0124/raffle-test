@@ -5,7 +5,7 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit'
 export const config = getDefaultConfig({
   appName: 'IRA-Raffle',
   projectId: 'b6187205b37dc9d704772f16dca5b71e',
-  chains: [bscTestnet],
+  chains: [sepolia],
   ssr: true,
 
   transports: {

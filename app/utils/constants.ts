@@ -122,7 +122,7 @@ export const assets = [
 
 // Ensure there is a contract address for each asset above
 export const contracts = {
-  raffle: '0xc3baf8b9a5876166158aeac5b5f0386b0e762446',
+  raffle: '0x0954aBc547d9a4694bF044354b08BF3A4C042109',
   raffle1: '0x2a426b0e1c6Ec9D0D7B14220aeBdf02BD71D1496',
   raffle2: '0xfacD015340549770B001961b1896313893fb176e',
   coinflip: '0xB4c9207CC90AA0dAC7625c1d9203365FcB46e3E5',

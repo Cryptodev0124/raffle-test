@@ -18,7 +18,7 @@ export const Footer = () => {
   return (
     <>
 
-      <div className="bg-[#000000]">
+      <div className="bg-transparent">
         {/* <div className="pt-8 pb-5 bg-[#00000077]">
           <div className="flex justify-center text-sm text-white">
             <Link to="/terms" className="pr-5 underline">
@@ -26,7 +26,7 @@ export const Footer = () => {
             </Link>
           </div>
         </div> */}
-        <div className="p-2 bg-[#00000077]">
+        <div className="p-2 bg-transparent">
           <div className="flex justify-center text-sm text-white">
             {/* <Link to="https://www.whatsthisfor.io/" className="pr-5">
               <img src={website} className="w-[56px]" />
