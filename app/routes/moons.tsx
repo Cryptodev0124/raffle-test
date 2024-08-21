@@ -1,4 +1,3 @@
-'use client'
 import { TopNav } from '~/components/nav/TopNav'
 import { Pool } from '~/components/Pool'
 import { Link } from '@remix-run/react'

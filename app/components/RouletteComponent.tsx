@@ -1,4 +1,3 @@
-'use client'
 import React, { useState, useEffect, useMemo } from 'react'
 import { Wheel } from 'react-custom-roulette'
 import eth from '~/assets/ETH.svg'
