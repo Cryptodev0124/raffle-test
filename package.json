@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "npm run typegen",
-    "dev": "set PORT=80 && remix vite:dev",
+    "dev": "remix vite:dev",
     "build": "remix vite:build",
     "start": "wrangler pages dev ./build/client",
     "deploy": "wrangler pages deploy ./build/client",
