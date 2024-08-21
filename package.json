@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "postinstall": "npm run typegen",
-    "dev": "remix vite:dev",
-    "build": "set PORT=80 && remix vite:build",
+    "dev": "set PORT=80 && remix vite:dev",
+    "build": "remix vite:build",
     "start": "wrangler pages dev ./build/client",
     "deploy": "wrangler pages deploy ./build/client",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
