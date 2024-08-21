@@ -1,4 +1,3 @@
-'use client'
 import React, { Suspense, useState, useEffect } from 'react'
 import { TopNav } from '~/components/nav/TopNav'
 import { Pool } from '~/components/Pool'
