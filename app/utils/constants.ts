@@ -122,7 +122,7 @@ export const assets = [
 
 // Ensure there is a contract address for each asset above
 export const contracts = {
-  raffle: '0x0954aBc547d9a4694bF044354b08BF3A4C042109',
+  raffle: '0xA57BDCd9a1306d790e6699fC8e66670F72D71C09',
   raffle1: '0x2a426b0e1c6Ec9D0D7B14220aeBdf02BD71D1496',
   raffle2: '0xfacD015340549770B001961b1896313893fb176e',
   coinflip: '0xB4c9207CC90AA0dAC7625c1d9203365FcB46e3E5',
@@ -134,7 +134,7 @@ export const contracts = {
   // spinWheel1: '0xd6ADD118ad8c83fC60cB7F44cB63993407bA3821',
   jackpot: '0x23892eb255701399e2d1164800E63Adda122AAe6',
   coinflip1: '0x5e959580a9cc50114d277ABb20fa73B7cDa0674e',
-  stakingToken: '0xE6fd8AdffbF77f379e121120c66773c6FAd2F487',
+  stakingToken: '0x733ca949Cc6994C9545ccB3619A7cfA9c2a519b0',
   ETHx: '0xa35b1b31ce002fbf2058d22f30f95d405200a15b',
   stETH: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
   sfrxETH: '0xac3E018457B222d93114458476f3E3416Abbe38F',

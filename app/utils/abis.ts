@@ -1,442 +1,227 @@
 export const raffleAbi = [
-  {
-    inputs: [
-      { internalType: 'address', name: '_feeAddress', type: 'address' },
-      {
-        internalType: 'address',
-        name: '_randomGeneratorAddress',
-        type: 'address',
-      },
-      {
-        internalType: 'contract IReferral',
-        name: '_referral',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  { inputs: [], name: 'AccessControlBadConfirmation', type: 'error' },
-  {
-    inputs: [
-      { internalType: 'address', name: 'account', type: 'address' },
-      { internalType: 'bytes32', name: 'neededRole', type: 'bytes32' },
-    ],
-    name: 'AccessControlUnauthorizedAccount',
-    type: 'error',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'ethPerTicket',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'startTime',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'duration',
-        type: 'uint256',
-      },
-    ],
-    name: 'AddTimePool',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'uint256', name: 'id', type: 'uint256' },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'round',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'isFinished',
-        type: 'bool',
-      },
-    ],
-    name: 'ClosePool',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'uint256', name: 'id', type: 'uint256' },
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'round',
-        type: 'uint256',
-      },
-      { indexed: true, internalType: 'address', name: 'user', type: 'address' },
-    ],
-    name: 'DepositTimePool',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'uint256', name: 'id', type: 'uint256' },
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'round',
-        type: 'uint256',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'winner',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'poolSize',
-        type: 'uint256',
-      },
-    ],
-    name: 'DrawAndReopenTimePool',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
-      {
-        indexed: true,
-        internalType: 'bytes32',
-        name: 'previousAdminRole',
-        type: 'bytes32',
-      },
-      {
-        indexed: true,
-        internalType: 'bytes32',
-        name: 'newAdminRole',
-        type: 'bytes32',
-      },
-    ],
-    name: 'RoleAdminChanged',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-    ],
-    name: 'RoleGranted',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-    ],
-    name: 'RoleRevoked',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'newFeeAddress',
-        type: 'address',
-      },
-    ],
-    name: 'SetFeeAddress',
-    type: 'event',
-  },
-  {
-    inputs: [],
-    name: 'ADMIN_ROLE',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'DEFAULT_ADMIN_ROLE',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'OPERATOR_ROLE',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint256', name: '_totalStakedAmount', type: 'uint256' },
-      { internalType: 'uint256', name: '_ethPerTicket', type: 'uint256' },
-      { internalType: 'uint256', name: '_startTmime', type: 'uint256' },
-      { internalType: 'uint256', name: '_duration', type: 'uint256' },
-      { internalType: 'uint256', name: '_feeBPS', type: 'uint256' },
-    ],
-    name: 'addTimePool',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '_id', type: 'uint256' }],
-    name: 'closePool',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint256', name: '_id', type: 'uint256' },
-      { internalType: 'address', name: '_referrer', type: 'address' },
-    ],
-    name: 'depositTimePool',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '_id', type: 'uint256' }],
-    name: 'drawAndReopenTimePool',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint256', name: '_id', type: 'uint256' },
-      { internalType: 'uint256', name: '_totalStakedAmount', type: 'uint256' },
-      { internalType: 'uint256', name: '_startTime', type: 'uint256' },
-      { internalType: 'uint256', name: '_ethPerTicket', type: 'uint256' },
-      { internalType: 'uint256', name: '_poolSize', type: 'uint256' },
-      { internalType: 'uint256', name: '_duration', type: 'uint256' },
-      { internalType: 'uint256', name: '_feeBPS', type: 'uint256' },
-      { internalType: 'bool', name: '_bool', type: 'bool' },
-    ],
-    name: 'editPool',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'feeAddress',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'bytes32', name: 'role', type: 'bytes32' }],
-    name: 'getRoleAdmin',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getWinningPools',
-    outputs: [
-      {
-        components: [
-          { internalType: 'bool', name: 'poolType', type: 'bool' },
-          { internalType: 'uint256', name: 'id', type: 'uint256' },
-          { internalType: 'uint256', name: 'round', type: 'uint256' },
-          { internalType: 'uint256', name: 'ethPerTicket', type: 'uint256' },
-          { internalType: 'uint256', name: 'poolSize', type: 'uint256' },
-          { internalType: 'address', name: 'winner', type: 'address' },
-        ],
-        internalType: 'struct wtfRaffleContract.WinningPool[]',
-        name: '',
-        type: 'tuple[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
-      { internalType: 'address', name: 'account', type: 'address' },
-    ],
-    name: 'grantRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
-      { internalType: 'address', name: 'account', type: 'address' },
-    ],
-    name: 'hasRole',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'randomGenerator',
-    outputs: [
-      {
-        internalType: 'contract IRandomNumberGenerator',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'referral',
-    outputs: [
-      { internalType: 'contract IReferral', name: '', type: 'address' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
-      { internalType: 'address', name: 'callerConfirmation', type: 'address' },
-    ],
-    name: 'renounceRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
-      { internalType: 'address', name: 'account', type: 'address' },
-    ],
-    name: 'revokeRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '_feeAddress', type: 'address' }],
-    name: 'setFeeAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint8', name: '', type: 'uint8' },
-      { internalType: 'uint256', name: '', type: 'uint256' },
-      { internalType: 'uint256', name: '', type: 'uint256' },
-      { internalType: 'address', name: '', type: 'address' },
-    ],
-    name: 'stakedAmount',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'bytes4', name: 'interfaceId', type: 'bytes4' }],
-    name: 'supportsInterface',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    name: 'timePool',
-    outputs: [
-      { internalType: 'uint256', name: 'totalStakedAmount', type: 'uint256' },
-      { internalType: 'uint256', name: 'actualPoolSize', type: 'uint256' },
-      { internalType: 'uint256', name: 'ethPerTicket', type: 'uint256' },
-      { internalType: 'uint256', name: 'startTime', type: 'uint256' },
-      { internalType: 'uint256', name: 'duration', type: 'uint256' },
-      { internalType: 'uint256', name: 'round', type: 'uint256' },
-      { internalType: 'bool', name: 'isFinished', type: 'bool' },
-      { internalType: 'uint256', name: 'requestId', type: 'uint256' },
-      { internalType: 'uint256', name: 'feeBPS', type: 'uint256' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'timePoolLength',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'userInfo',
-    outputs: [
-      { internalType: 'uint256', name: 'point', type: 'uint256' },
-      { internalType: 'uint256', name: 'lastPointBlock', type: 'uint256' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    name: 'winningPools',
-    outputs: [
-      { internalType: 'bool', name: 'poolType', type: 'bool' },
-      { internalType: 'uint256', name: 'id', type: 'uint256' },
-      { internalType: 'uint256', name: 'round', type: 'uint256' },
-      { internalType: 'uint256', name: 'ethPerTicket', type: 'uint256' },
-      { internalType: 'uint256', name: 'poolSize', type: 'uint256' },
-      { internalType: 'address', name: 'winner', type: 'address' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'winningPoolsLength',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  { stateMutability: 'payable', type: 'receive' },
+	{
+		"inputs": [],
+		"name": "buyTicket",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newMaxTickets",
+				"type": "uint256"
+			}
+		],
+		"name": "setMaxTickets",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newTicketPriceInUSD",
+				"type": "uint256"
+			}
+		],
+		"name": "setTicketPriceInUSD",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newTreasury",
+				"type": "address"
+			}
+		],
+		"name": "setTreasury",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_iraTokenAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_treasury",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "usdAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "getIRATokenAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getPlayers",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getWinners",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "iraToken",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "maxTickets",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "players",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "round",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ticketPriceInUSD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "treasury",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "winners",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
 ]
 
 export const coinflipAbi = [

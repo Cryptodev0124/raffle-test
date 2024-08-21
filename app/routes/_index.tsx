@@ -8,6 +8,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { raffleAbi } from '~/utils/abis'
 import { contracts, pools } from '~/utils/constants'
 import { Footer } from '~/components/nav/Footer'
+import { erc20Abi, parseEther } from 'viem'
 import { useEffect, useState } from 'react'
 import { formatEth } from '~/utils/bigint'
 import { TermsModal } from '~/components/TermsModal'
@@ -93,9 +94,11 @@ export default function Index() {
   )
 
   let canStake = true
+  const [isApproved, setApproved] = useState(false)
+  let stakeAmount = 500 * 1e18
   let iraPerTicket = '0x23455'
   let buyBtnText = 'Buy Ticket'
-
+  
   if (!isConnected) {
     buyBtnText = 'Connect Wallet'
   } 
@@ -213,18 +216,18 @@ export default function Index() {
     return pages
   }
 
-  useEffect(() => {
-    if (readContractsError) {
-      setError('Error loading data')
-      setIsLoading(false)
-    } else if (data && data[0]) {
-      const poolsResult = data[0].result as Pool[]
-      setWinningPools(poolsResult)
-      setTotalPages(Math.ceil(poolsResult.length / itemsPerPage))
-      setPageNumbers(calculatePageNumbers(totalPages, 1))
-      setIsLoading(false)
-    }
-  }, [data, readContractsError, setPageNumbers, setTotalPages, setWinningPools])
+  // useEffect(() => {
+  //   if (readContractsError) {
+  //     setError('Error loading data')
+  //     setIsLoading(false)
+  //   } else if (data && data[0]) {
+  //     const poolsResult = data[0].result as Pool[]
+  //     setWinningPools(poolsResult)
+  //     setTotalPages(Math.ceil(poolsResult.length / itemsPerPage))
+  //     setPageNumbers(calculatePageNumbers(totalPages, 1))
+  //     setIsLoading(false)
+  //   }
+  // }, [data, readContractsError, setPageNumbers, setTotalPages, setWinningPools])
 
   useEffect(() => {
     setPageNumbers(calculatePageNumbers(totalPages, currentPage))
@@ -244,14 +247,14 @@ export default function Index() {
       switchChain({ chainId: 11155111 })
     } else {
       try {
+        alert("here")
         contractWrite.writeContract({
           abi: raffleAbi,
           address: contracts.raffle,
-          functionName: 'depositTimePool',
+          functionName: 'buyTicket',
           // args: [BigInt(id), referralAddress],
-          value: BigInt(iraPerTicket),
+          // value: BigInt(iraPerTicket),
         })
-        alert(isConnected)
       } catch (e) {
         console.log(e)
       }
@@ -395,9 +398,32 @@ export default function Index() {
           <img src={ticketImg} className='ticketImg' alt='' width="250px" />
         </div>
         <div className={`buttonSection mx-1 ${'bg-blue-500 glow text-white'} rounded`}>
-          <button className={`buyBtn ${
+        {!isApproved ?
+            <button
+              className={`w-full text-xl play-button px-4 disabled:!bg-gray-500 h-14 hover:scale-103 rounded-full relative text-black hover:scale-105 ${
+                !isApproved ? 'hover:opacity-90' : 'opacity-60'
+              }`}
+              onClick={() => {
+                if (chainId !== 11155111) {
+                  switchChain({ chainId: 11155111 })
+                } else if (isApproved) {
+                  return
+                } else {
+                  contractWrite.writeContract({
+                    abi: erc20Abi,
+                    address: contracts.stakingToken,
+                    functionName: 'approve',
+                    args: [contracts.raffle, BigInt(stakeAmount)],
+                  })
+                  setApproved(true)
+                }
+              }}
+            >
+              Approve IRA
+            </button> : <button className={`buyBtn ${
               canStake ? 'hover:opacity-90' : 'opacity-60'
             }`} onClick={() => buyTicket()} disabled={!canStake}>{buyBtnText}</button>
+          }
         </div>
       </div>
 
@@ -413,7 +439,7 @@ export default function Index() {
                   No
                 </div>
                 <div className="table-cell uppercase text-left px-8 py-6">
-                  PoolName/Round
+                  Round
                 </div>
                 <div className="table-cell uppercase text-left px-8 py-6">
                   Stake
