@@ -65,7 +65,7 @@ export default function Index() {
       {
         abi: raffleAbi,
         address: contracts.raffle,
-        functionName: 'getWinningPools',
+        functionName: 'getWinners',
       },
     ],
   })
@@ -247,7 +247,6 @@ export default function Index() {
       switchChain({ chainId: 11155111 })
     } else {
       try {
-        alert("here")
         contractWrite.writeContract({
           abi: raffleAbi,
           address: contracts.raffle,
